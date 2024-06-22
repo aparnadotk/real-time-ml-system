@@ -25,8 +25,8 @@ def produce_trades(
     Returns:
         None
     """
-    app = Application(broker_address=kafka_broker_addres)
-
+    app = Application(broker_address=kafka_broker_addres, loglevel="DEBUG")
+    #breakpoint()
     # the topic where we will save the trades
     topic = app.topic(name=kafka_topic_name, value_serializer='json')
 
@@ -36,7 +36,7 @@ def produce_trades(
     kraken_api = KrakenWebsocketTradeAPI(product_id=product_id)
 
     logger.info('Creating the producer...')
-
+    
     # Create a Producer instance
     with app.get_producer() as producer:
         while True:
@@ -69,6 +69,7 @@ if __name__ == '__main__':
     # parser.add_argument('--kafka_topic_name', type=str, required=True)
     # args = parser.parse_args()
 
+    #logger.debug(f'Kafka broker address is {config.kafka_broker_addres}')
     produce_trades(
         kafka_broker_addres=config.kafka_broker_addres,
         kafka_topic_name=config.kafka_topic_name,
