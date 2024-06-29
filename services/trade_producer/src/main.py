@@ -13,7 +13,7 @@ def produce_trades(
     kafka_broker_addres: str,
     kafka_topic_name: str,
     product_id: str,
-) -> None: 
+) -> None:
     """
     Reads trades from the Kraken websocket API and saves them into a Kafka topic.
 
@@ -25,18 +25,18 @@ def produce_trades(
     Returns:
         None
     """
-    app = Application(broker_address=kafka_broker_addres, loglevel="DEBUG")
-    #breakpoint()
+    app = Application(broker_address=kafka_broker_addres, loglevel='DEBUG')
+    # breakpoint()
     # the topic where we will save the trades
     topic = app.topic(name=kafka_topic_name, value_serializer='json')
 
     logger.info(f'Creating the Kraken API to fetch data for {product_id}')
-    
+
     # Create an instance of the Kraken API
     kraken_api = KrakenWebsocketTradeAPI(product_id=product_id)
 
     logger.info('Creating the producer...')
-    
+
     # Create a Producer instance
     with app.get_producer() as producer:
         while True:
@@ -59,7 +59,6 @@ def produce_trades(
 
 
 if __name__ == '__main__':
-    
     # You can also pass configuration parameters using the command line
     # use argparse to parse the kafka_broker_address
     # and kafka_topic_name from the command line
@@ -69,9 +68,9 @@ if __name__ == '__main__':
     # parser.add_argument('--kafka_topic_name', type=str, required=True)
     # args = parser.parse_args()
 
-    #logger.debug(f'Kafka broker address is {config.kafka_broker_addres}')
+    # logger.debug(f'Kafka broker address is {config.kafka_broker_addres}')
     produce_trades(
         kafka_broker_addres=config.kafka_broker_addres,
         kafka_topic_name=config.kafka_topic_name,
         product_id=config.product_id,
-    ) 
+    )
